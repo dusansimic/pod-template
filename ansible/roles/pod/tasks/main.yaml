@@ -1,0 +1,26 @@
+---
+
+- name: create units directory
+  ansible.builtin.file:
+    state: directory
+    path: "{{ units_path }}"
+    mode: 0755
+    seuser: unconfined_u
+    serole: object_r
+    setype: systemd_unit_file_t
+
+- name: set context for units directory
+  community.general.sefcontext:
+    target: "{{ ansible_env.HOME }}/{{ units_path }}(/.*)?"
+    setype: systemd_unit_file_t
+    state: present
+
+- name: create pod service
+  ansible.builtin.template:
+    src: pod.j2
+    dest: "{{ units_path }}/pod-{{ pod_name }}.service"
+    mode: 0644
+  notify:
+    - reload daemon
+    - enable pod service
+    - restart pod service

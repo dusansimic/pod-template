@@ -1,0 +1,18 @@
+---
+
+- name: reload daemon
+  ansible.builtin.systemd:
+    daemon_reload: true
+    scope: "{{ systemd_scope }}"
+
+- name: enable pod service
+  ansible.builtin.systemd:
+    name: "pod-{{ pod_name }}.service"
+    enabled: true
+    scope: "{{ systemd_scope }}"
+
+- name: restart pod service
+  ansible.builtin.systemd:
+    name: "pod-{{ pod_name }}.service"
+    state: restarted
+    scope: "{{ systemd_scope }}"
