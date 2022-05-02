@@ -11,7 +11,7 @@
 
 - name: set context for units directory
   community.general.sefcontext:
-    target: "{{ ansible_env.HOME }}/{{ units_path }}(/.*)?"
+    target: "{{ units_path }}(/.*)?"
     setype: systemd_unit_file_t
     state: present
 
